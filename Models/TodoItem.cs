@@ -12,7 +12,12 @@ namespace Todo.Models
         [MaxLength(30, ErrorMessage = "O campo deve ter entre 3 e 30 caracteres")]
         public string Title { get; set; }
 
-        [Required]
-        public User User { get; set; }
+        [Required(ErrorMessage = "O campo é obrigátorio")]
+        public bool Status { get; set; }
+
+        [Required(ErrorMessage = "O campo é obrigátorio")]
+        public int UserId { get; set; }
+
+        public virtual User? User { get; set; }
     }
 }
