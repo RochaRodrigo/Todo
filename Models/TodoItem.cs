@@ -16,8 +16,8 @@ namespace Todo.Models
         public bool Status { get; set; }
 
         [Required(ErrorMessage = "O campo é obrigátorio")]
-        public int UserId { get; set; }
+        public int WorkspaceId { get; set; }
 
-        public virtual User? User { get; set; }
+        public virtual Workspace? Workspace { get; set; }
     }
 }

@@ -1,7 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Todo.Models
 {
+    [Index(nameof(Email), Name = "UQ_EmailUser", IsUnique = true)]
+    [Index(nameof(Email), Name = "IX_EmailUser")]
     public class User
     {
         [Key]

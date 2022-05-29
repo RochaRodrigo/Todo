@@ -8,6 +8,7 @@ namespace Todo.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly TodoDataContext _context;
@@ -30,7 +31,7 @@ namespace Todo.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex?.InnerException?.Message);
             }
         }
 
@@ -47,11 +48,12 @@ namespace Todo.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex?.InnerException?.Message);
             }
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<User>> Post([FromBody] User model)
         {
             if (!ModelState.IsValid)
@@ -59,6 +61,15 @@ namespace Todo.Controllers
 
             try
             {
+                var user = await _context.Users.AsNoTracking()
+                    .FirstOrDefaultAsync(x => x.Email == model.Email);
+
+                if (user != null)
+                    return BadRequest(new
+                    {
+                        message = "Já existe um usuário cadastrado com o e-mail informado."
+                    });
+
                 await _context.Users.AddAsync(model);
                 await _context.SaveChangesAsync();
 
@@ -66,7 +77,7 @@ namespace Todo.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex?.InnerException?.Message);
             }
         }
 
@@ -89,7 +100,7 @@ namespace Todo.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex?.InnerException?.Message);
             }
         }
     }

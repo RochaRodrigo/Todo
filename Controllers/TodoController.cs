@@ -6,9 +6,9 @@ using Todo.Models;
 
 namespace Todo.Controllers
 {
+    [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
-    [Route("api/v1/[controller]")]
     public class TodoController : ControllerBase
     {
         private readonly TodoDataContext _context;
@@ -18,15 +18,15 @@ namespace Todo.Controllers
         }
 
         [HttpGet("{userId:int}")]
-        public async Task<ActionResult<IEnumerable<TodoItem>>> Get(int userId)
+        public async Task<ActionResult<IEnumerable<TodoItem>>> Get(int workspaceId)
         {
             try
             {
                 var todos = await _context.TodoItems.AsNoTracking()
-                .Where(x => x.UserId == userId).ToListAsync();
+                .Where(x => x.WorkspaceId == workspaceId).ToListAsync();
 
                 if (todos == null || todos.Count < 1)
-                    return NotFound(new { message = "Nenhuma tarefa encontrado" });
+                    return NotFound(new { message = "Nenhuma tarefa encontrada" });
 
                 return Ok(todos);
             }
@@ -37,12 +37,12 @@ namespace Todo.Controllers
         }
 
         [HttpGet("{userId:int}/{id:int}")]
-        public async Task<ActionResult<TodoItem>> GetById(int userId, int id)
+        public async Task<ActionResult<TodoItem>> GetById(int workspaceId, int id)
         {
             try
             {
                 var todo = await _context.TodoItems.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.UserId == userId && x.Id == id);
+                .FirstOrDefaultAsync(x => x.WorkspaceId == workspaceId && x.Id == id);
 
                 if (todo == null)
                     return NotFound(new { message = "Nenhuma tarefa encontrado" });
@@ -90,7 +90,7 @@ namespace Todo.Controllers
             try
             {
                 var todo = await _context.TodoItems.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == id && x.UserId == model.Id);
+                .FirstOrDefaultAsync(x => x.Id == id && x.WorkspaceId == model.WorkspaceId);
 
                 if (todo == null)
                     return NotFound(new { message = "Nenhuma tarefa encontrado" });

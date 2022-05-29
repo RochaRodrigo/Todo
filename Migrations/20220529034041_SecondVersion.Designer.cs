@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Todo.Data;
 
@@ -10,9 +11,10 @@ using Todo.Data;
 namespace Todo.Migrations
 {
     [DbContext(typeof(TodoDataContext))]
-    partial class TodoDataContextModelSnapshot : ModelSnapshot
+    [Migration("20220529034041_SecondVersion")]
+    partial class SecondVersion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,7 +62,7 @@ namespace Todo.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -76,11 +78,6 @@ namespace Todo.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex(new[] { "Email" }, "IX_EmailUser");
-
-                    b.HasIndex(new[] { "Email" }, "UQ_EmailUser")
-                        .IsUnique();
 
                     b.ToTable("Users");
                 });
