@@ -9,7 +9,6 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 var key = Encoding.ASCII.GetBytes(Secret.Key);
 builder.Services.AddAuthentication(x =>
 {
@@ -57,8 +56,8 @@ app.UseHttpsRedirection();
 app.UseCors(x => x
     .AllowAnyMethod()
     .AllowAnyHeader()
-    .SetIsOriginAllowed(origin => true) // allow any origin
-    .AllowCredentials()); // allow credentials
+    .SetIsOriginAllowed(origin => true)
+    .AllowCredentials());
 
 app.UseAuthentication();
 app.UseAuthorization();

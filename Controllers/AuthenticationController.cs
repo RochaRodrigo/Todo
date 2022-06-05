@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Todo.Commands;
 using Todo.Data;
 using Todo.Dto;
 using Todo.Models;
@@ -19,7 +20,7 @@ namespace Todo.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<dynamic>> Authentication([FromBody] AuthenticationDTO model)
+        public async Task<ActionResult<CommandResult>> Authentication([FromBody] AuthenticationDTO model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -33,11 +34,7 @@ namespace Todo.Controllers
 
                 var token = TokenServices.GenerateToken(user);
 
-                return new
-                {
-                    User = user,
-                    Token = token
-                };
+                return new CommandResult(true, "Usuário autenticado com sucesso", new { User = user, Token = token });
 
             }
             catch (Exception ex)
